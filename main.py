@@ -18,3 +18,5 @@ def main():
         # Transition to the next generation of formulas
         formulus = transition(fitness)
 
+if __name__ == "__main__":
+    main()

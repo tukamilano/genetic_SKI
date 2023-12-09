@@ -5,7 +5,7 @@ def generate(depth=0, max_depth=GENERATE_MAX_DEPTH):
     s = random.randint(0,1)
     depth += 1
     if s == 0 or depth == max_depth:
-        t = random.randint(0,2)
+        t = random.randint(0,1)
         if t == 0:
             x = 'S'
         elif t == 1:

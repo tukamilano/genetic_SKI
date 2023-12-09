@@ -26,7 +26,7 @@ def transition(formulus_results, elite_rate=0.2, crossover_rate=0.2, mutate_rate
     crossover_list = []
     for _ in range(int(len(formulus)*crossover_rate)):
         crossover_list.append(random.choice(formulus))
-    new_crossover_list = mutate(crossover_list)
+    new_crossover_list = crossover(crossover_list)
     #formulus_resultsと重なっているnew_crossover_listの要素をmutated_listから削除
     for x in formulus:
         if x in new_crossover_list:
