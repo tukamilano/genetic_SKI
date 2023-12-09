@@ -1,6 +1,7 @@
 from genetic.pool import init_pool, transition
 from calculate.calculator import fitness_function
 from common import TEST_TIMES, GENERATION
+import random
 
 def main():
     formulus = init_pool()

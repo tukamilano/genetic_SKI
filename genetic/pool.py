@@ -3,8 +3,7 @@ from genetic.generate import generate
 from genetic.mutate import mutate
 from genetic.crossover import crossover
 from calculate.reduction import repeat_reduce
-from common import POOL_SIZE
-
+from common import POOL_SIZE, ELITE_RATE, CROSSOVER_RATE, MUTATE_RATE
 
 def init_pool(size=POOL_SIZE):
     formulus = []
@@ -17,16 +16,22 @@ def init_pool(size=POOL_SIZE):
             if len(formulus) == size:
                 return formulus
 
-def transition(formulus_results, elite_rate=0.2, crossover_rate=0.2, mutate_rate=0.3):
+def transition(formulus_results, elite_rate=ELITE_RATE, crossover_rate=CROSSOVER_RATE, mutate_rate=MUTATE_RATE):
 
-    #formulus_resultsを昇順に揃える
-    formulus = [x[0] for x in sorted(formulus_results.items(), key = lambda x : x[1], reverse=True)]
+    formulus = [x[0] for x in sorted(formulus_results.items(), key = lambda x : (x[1], random.random()), reverse=True)]
 
     #crossoverする個体をピックアップ(formulus_resultsからランダムで２つ組を選ぶのをlen(formulus_results)*crossover_rate回繰り返す)
-    crossover_list = []
+    crossover_pair_list = []
     for _ in range(int(len(formulus)*crossover_rate)):
-        crossover_list.append(random.choice(formulus))
-    new_crossover_list = crossover(crossover_list)
+        crossover_pair_list.append(random.sample(formulus, 2))
+    new_crossover_pair_list = crossover(crossover_pair_list)
+    #リストをflattenにして重複を削除
+    new_crossover_list = []
+    for x in new_crossover_pair_list:
+        new_crossover_list.append(x)
+    #print(new_crossover_list)
+    new_crossover_list = list(set(new_crossover_list))
+
     #formulus_resultsと重なっているnew_crossover_listの要素をmutated_listから削除
     for x in formulus:
         if x in new_crossover_list:
