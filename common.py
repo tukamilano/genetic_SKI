@@ -1,0 +1,11 @@
+#structure of formula
+GENERATE_MAX_DEPTH = 10
+
+#reduction
+MAX_REPEAT = 100
+MAX_LENGTH = 10000
+
+TEST_TIMES = 10
+
+POOL_SIZE = 100
+GENERATION = 100
