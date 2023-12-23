@@ -1,47 +1,47 @@
 from calculate.reduction import repeat_reduce
 from common import TEST_TIMES
 
-# It might be worth trying to encode with 4 variations by swapping 'S' and 'K'
-def encoding(num):
-    return 'AS'* (num) + 'S'
+def encoding(num,term):
+    return ('A'+ term) * num + term
 
-def decoding(term):
-    # Find the number of 'A's and 'K's in the term
-    num_A = term.count('A')
-    num_K = term.count('S')
-
-    # Check if the pattern matches 'A' * num + 'K' * (num + 1)
-    if term == 'AS' * num_A + 'S' and num_K - num_A == 1:
-        return num_A
-    else:
-        return None
-
-def squared(length=TEST_TIMES):
-    # Generate a list of pairs (i, i^2) for i in range of length
-    return [(i, i+3) for i in range(length)]
-
-def calculate(formula):
+def decoding(expression,term):
+    for num in range(TEST_TIMES):
+        if expression == ('A'+ term) * num + term:
+            return num
+    return None
+    
+def calculate(formula, term):
     results = []
-    for num in squared():
+    for num in range(TEST_TIMES):
         # Apply repeat_reduce function to 'A' + formula + encoded number
-        result = repeat_reduce('A' + formula + encoding(num[0]))
+        result = repeat_reduce('A' + formula + encoding(num, term))
 
-        if result == None or decoding(result) == None:
+        if result == None or decoding(result,term) == None:
             results.append("undefined")
-        elif num[1] != decoding(result):
-            results.append("wrong")
         else:
-            results.append("correct")          
+            results.append(decoding(result,term))       
     
     return results
 
-def fitness_function(formulus):
+def fitness_function(formulus, values_list, term):
     fitness = {}
     for formula in formulus:
         # Calculate results for each formula
-        results = calculate(formula)
-        # Compute the value as 2 times the count of "correct" plus the count of "wrong"
-        value = (2 * results.count("correct") + results.count("wrong"))
+        results = calculate(formula, term)
+
+        gain_list = []
+        # Compare the results with the values in values_list
+        for values in values_list:
+            for i in range(len(values)):
+                if results[i] == "undefined":
+                    continue
+                elif results[i] == values[i]:
+                    results[i] = "correct"
+                else:
+                    results[i] = "wrong"
+                # Compute the value as 2 times the count of "correct" plus the count of "wrong"
+            gain_list.append(2 * results.count("correct") + results.count("wrong"))
+
         # Create a dictionary with formula as key and value as value
-        fitness[formula] = value
+        fitness[formula] = max(gain_list)
     return fitness
