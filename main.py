@@ -1,30 +1,29 @@
 from genetic.pool import init_pool, transition
 from calculate.calculator import fitness_function
-from common import TEST_TIMES, GENERATION, TERM
+from common import TEST_TIMES, GENERATION
 
 def function1(length=TEST_TIMES):
     return [i+1 for i in range(length)]
 
 def function2(length=TEST_TIMES):
-    return [i+2 for i in range(length)]
-
-def function3(length=TEST_TIMES):
-    return [i+3 for i in range(length)]
-
-def function4(length=TEST_TIMES):
     return [2*i for i in range(length)]
 
-def function5(length=TEST_TIMES):
-    return [i+4 for i in range(length)]
+def function3(length=TEST_TIMES):
+    return [i*i for i in range(length)]
 
-function_list = [function1(), function2(), function3(), function4(), function5()]
+def function4(length=TEST_TIMES):
+    return [i-1 if i != 0 else 0 for i in range(length)]
+
+function_list = [function1(), function2(), function3(), function4()]
 
 def main():
     formulus = init_pool()
     for _ in range(GENERATION):
-        fitness = fitness_function(formulus, function_list, TERM)
+        fitness = fitness_function(formulus, function_list)
         # Display the maximum and average value of fitness
         print("Maximum value is {}".format(max(fitness.values())))
+        print("Term with maximum value is {}".format([key for key, value in fitness.items() if value == max(fitness.values())]))
+
         print("Average value is {}".format(sum(fitness.values())/len(fitness)))
         # Check if the maximum value of fitness equals 2 times TEST_TIMES
         if max(fitness.values()) == 2 * TEST_TIMES:

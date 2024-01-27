@@ -1,33 +1,38 @@
 from calculate.reduction import repeat_reduce
-from common import TEST_TIMES
+from common import TEST_TIMES, ONE_TERM, ZERO_TERM, TERM
 
-def encoding(num,term):
-    return ('A'+ term) * num + term
+def encoding(num):
+    if num == 0:
+        return ZERO_TERM
+    else:
+        return ('A' + TERM) * (num - 1) + ONE_TERM
 
-def decoding(expression,term):
+def decoding(expression):
     for num in range(TEST_TIMES):
-        if expression == ('A'+ term) * num + term:
-            return num
+        if expression == ZERO_TERM:
+            return 0
+        if expression == ('A'+ TERM) * num + ONE_TERM:
+            return num + 1
     return None
     
-def calculate(formula, term):
+def calculate(formula):
     results = []
     for num in range(TEST_TIMES):
         # Apply repeat_reduce function to 'A' + formula + encoded number
-        result = repeat_reduce('A' + formula + encoding(num, term))
+        result = repeat_reduce('A' + formula + encoding(num))
 
-        if result == None or decoding(result,term) == None:
+        if result == None or decoding(result) == None:
             results.append("undefined")
         else:
-            results.append(decoding(result,term))       
+            results.append(decoding(result))       
     
     return results
 
-def fitness_function(formulus, values_list, term):
+def fitness_function(formulus, values_list):
     fitness = {}
     for formula in formulus:
         # Calculate results for each formula
-        results = calculate(formula, term)
+        results = calculate(formula)
 
         gain_list = []
         # Compare the results with the values in values_list

@@ -51,7 +51,6 @@ def ski_calculator_reduce(term):
       term = term[:i-2] + term[i+1:k] + term[j:]
       reduced = False
 
-    """
     if (1 <= i) and (term[i-1:i+1] == "AI"):
       a = 1
       j = i+1
@@ -64,7 +63,6 @@ def ski_calculator_reduce(term):
       term = term[:i-1] + term[i+1:]
       reduced = False
       break
-    """
 
   return term, reduced
 
